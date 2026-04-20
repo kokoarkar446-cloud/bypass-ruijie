@@ -21,7 +21,7 @@ def banner():
     # ၁။ အဝါရောင် အပေါ်စည်း
     print(f"{YELLOW} ="*35)
     
-    # ၂။ Ruijie Logo - ဝါ၊ စိမ်း၊ နီ အရောင်ခွဲခြားခြင်း
+    # ၂။ Ruijie Logo - အဝါ၊ အစိမ်း၊ အနီ တစ်လိုင်းချင်းစီ အရောင်ထည့်ခြင်း
     print(f"{YELLOW}      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗")
     print(f"{YELLOW}      ██╔══██╗██║   ██║██║     ██║██║██╔════╝")
     print(f"{GREEN}      ██████╔╝██║   ██║██║     ██║██║█████╗  ")
@@ -35,6 +35,7 @@ def banner():
 
 def get_hwid():
     try:
+        # kkp.py logic
         return f"ID-{subprocess.check_output(['whoami']).decode().strip()}"
     except:
         return "ID-Unknown"
@@ -43,6 +44,7 @@ def verify():
     hwid = get_hwid()
     banner()
     
+    # Auto Login စစ်ဆေးခြင်း
     if os.path.exists(LICENSE_FILE):
         print(f"{GREEN}[✓] Status: Active (Auto Login Success){RESET}")
         return True
@@ -68,6 +70,7 @@ def verify():
 
 def check_net():
     try:
+        # starlink.py network check logic
         return requests.get("http://www.google.com/generate_204", timeout=5).status_code == 204
     except:
         return False
@@ -105,6 +108,7 @@ def start_bypass():
                 print(f"{GREEN}[✓] SID Captured: {sid[:15]}...{RESET}")
                 p_host = f"{urlparse(r.url).scheme}://{urlparse(r.url).netloc}"
                 
+                # Voucher Bypass
                 session.post(f"{p_host}/api/auth/voucher/", 
                              json={'accessCode': '123456', 'sessionId': sid, 'apiVersion': 1}, 
                              timeout=10)
@@ -121,7 +125,7 @@ def start_bypass():
                 while check_net():
                     time.sleep(5)
             else:
-                # SID ရှာမတွေ့ပါက ပြသမည့် စာသား
+                # SID Not Found Error
                 print(f"{RED}[!] SID Not Found. Retrying in 5s...{RESET}", end="\r")
                 time.sleep(5)
         except:
