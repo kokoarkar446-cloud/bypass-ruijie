@@ -21,7 +21,7 @@ def banner():
     # ၁။ အဝါရောင် အပေါ်စည်း
     print(f"{YELLOW} ="*35)
     
-    # ၂။ Ruijie Logo ကို ဝါ၊ စိမ်း၊ နီ တစ်လိုင်းချင်းစီ ခွဲပြီး အရောင်ထည့်ခြင်း
+    # ၂။ Ruijie Logo - ဝါ၊ စိမ်း၊ နီ အရောင်ခွဲခြားခြင်း
     print(f"{YELLOW}      ██████╗ ██╗   ██╗██╗     ██╗██╗███████╗")
     print(f"{YELLOW}      ██╔══██╗██║   ██║██║     ██║██║██╔════╝")
     print(f"{GREEN}      ██████╔╝██║   ██║██║     ██║██║█████╗  ")
@@ -29,7 +29,7 @@ def banner():
     print(f"{RED}      ██║  ██║╚██████╔╝██║╚█████╔╝██║███████╗")
     print(f"{RED}      ╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚═╝╚══════╝")
     
-    # ၃။ အနီရောင် Edition စာသား
+    # ၃။ အနီရောင် Premium Edition စာသား
     print(f"        {RED}✨ Ruijie Bypass - PREMIUM EDITION ✨{RESET}")
     print(f"{YELLOW} ="*35 + f"{RESET}\n")
 
@@ -43,7 +43,6 @@ def verify():
     hwid = get_hwid()
     banner()
     
-    # Auto Login
     if os.path.exists(LICENSE_FILE):
         print(f"{GREEN}[✓] Status: Active (Auto Login Success){RESET}")
         return True
@@ -122,7 +121,8 @@ def start_bypass():
                 while check_net():
                     time.sleep(5)
             else:
-                print(f"{RED}[!] SID Not Found. Retrying...{RESET}", end="\r")
+                # SID ရှာမတွေ့ပါက ပြသမည့် စာသား
+                print(f"{RED}[!] SID Not Found. Retrying in 5s...{RESET}", end="\r")
                 time.sleep(5)
         except:
             time.sleep(3)
